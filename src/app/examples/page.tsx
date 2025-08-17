@@ -1,3 +1,4 @@
+'use client';
 import useAxios from "axios-hooks"
 import Head from "next/head";
 
