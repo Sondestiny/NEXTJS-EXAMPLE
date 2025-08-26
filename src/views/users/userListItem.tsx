@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import {
   Box,
@@ -12,10 +13,11 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-import { User } from '@/types/users.type';
-import { useRouter } from 'next/router';
+
+import { useRouter } from 'next/navigation';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { User } from '@/types/user.type';
 
 type Props = {
   user: User;
@@ -24,6 +26,7 @@ type Props = {
 
 function UserListItem({ user, isNew = false }: Props) {
   const router = useRouter();
+
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [visible, setVisible] = useState(true);
@@ -43,7 +46,7 @@ function UserListItem({ user, isNew = false }: Props) {
 
   return (
     <Collapse in={visible}>
-      <Card sx={{ minWidth: 300 }}>
+      <Card sx={{ minWidth: 200 }}>
         <CardActionArea
           onClick={handleItemClick}
           sx={{ backgroundColor: 'primary.main' }}>
@@ -79,5 +82,4 @@ function UserListItem({ user, isNew = false }: Props) {
     </Collapse>
   );
 }
-
 export default UserListItem;

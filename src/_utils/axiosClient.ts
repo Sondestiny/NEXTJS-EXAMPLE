@@ -1,14 +1,21 @@
 import { AppConfig } from '@/_configs/app.config';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { axiosLRUCache } from './LruCache';
-import { configure } from 'axios-hooks';
-const axiosClient = axios.create({
-  baseURL: AppConfig.apiBase,
+import { configure, makeUseAxios } from 'axios-hooks';
+import { setupCache } from 'axios-cache-interceptor';
+// khai báo axiosClient
+export let axiosClient:AxiosInstance = axios.create({
+  baseURL: AppConfig.apiBase || "http://localhost:5000",
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000, // 10s
 });
-const cache = axiosLRUCache;
+// tích hợp axiosClient với cache
+axiosClient = setupCache(axiosClient, {
+  ttl: 1000 * 60 * 5, // cache 5 phút
+});
+
 axiosClient.interceptors.request.use(
     async (request) => {
         const token = {
@@ -27,4 +34,7 @@ axios.interceptors.response.use(
     (error) => Promise.reject(error)
 );
 
-configure({axios, cache});
+export const useAxiosClient = makeUseAxios({
+  axios: axiosClient
+});;
+

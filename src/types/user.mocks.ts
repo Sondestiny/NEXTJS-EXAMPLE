@@ -1,17 +1,17 @@
-import User from "./user.type";
 import {faker} from "@faker-js/faker";
+import { User } from "./user.type";
 
-export function createRandomUser() {
+function createRandomUser() {
   return {
     id: faker.string.uuid(),
     email: faker.internet.email(),
-    first_name: faker.name.firstName(),
-    last_name: faker.name.lastName(),
+    first_name: faker.person.firstName(),
+    last_name: faker.person.lastName(),
     avatar: faker.image.avatar(),
     
   };
 }
-
-export const mockUsers: User[]  = faker.helpers.multiple(createRandomUser, {
-  count: 100,
-});
+export const mockUsers : User[] = [];
+for (let index = 0; index < 20; index++) {
+  mockUsers.push(createRandomUser());
+}

@@ -1,49 +1,49 @@
+`use client`;
 import React from 'react';
-import { Alert, CircularProgress, Grid } from '@mui/material';
-import useUserList from '@/hooks/users/useGetListUsers';
-import { User, UserGetParams } from '@/types/users.type';
-import UserListItem from './UserListItem';
+import { Alert, CircularProgress, Grid} from '@mui/material';
+import UserListItem from './userListItem';
+import useUserList from '@/hooks/users/useGetListUser';
+import { User , UserGetParam} from '@/types/user.type';
 
-type Props = {
-  filter: UserGetParams;
+type UserListProps = {
+  filter: UserGetParam;
   justCreatedUser: User[];
 };
 
-function UserList({ filter, justCreatedUser }: Props) {
-  const [{ data, error, loading }] = useUserList(filter);
+function UserList( {filter, justCreatedUser}: UserListProps) {
+const [{data, loading, error}]  = useUserList({} as UserGetParam); 
 
+  
   return (
     <Grid container spacing={2} justifyContent="stretch">
       {loading && (
-        <Grid item xs={12} sx={{ textAlign: 'center' }}>
+        <Grid size={10} sx={{ textAlign: 'center' }}>
           <CircularProgress />
         </Grid>
       )}
-
       {error && (
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Alert severity="error">{error.message}</Alert>
         </Grid>
       )}
 
       {!loading && !data?.length && (
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Alert severity="warning">{'No data found'}</Alert>
         </Grid>
       )}
 
       {justCreatedUser.map((user) => (
-        <Grid item xs key={user.id}>
+        <Grid size={12} key={user.id}>
           <UserListItem user={user} isNew />
         </Grid>
       ))}
-
-      {data &&
-        data.map((user) => (
-          <Grid item xs key={user.id}>
-            <UserListItem user={user} />
-          </Grid>
-        ))}
+      
+      {data && data?.map((user:User) => (
+        <Grid size={2} spacing={2}  key={user?.id}>
+          <UserListItem user={user} isNew />
+        </Grid>
+      ))}
     </Grid>
   );
 }

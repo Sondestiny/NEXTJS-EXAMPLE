@@ -1,26 +1,28 @@
+'use client'
 import { AxiosRequestConfig } from 'axios';
-import useOriginalAxios, { Options, UseAxiosResult } from 'axios-hooks';
+import { Options} from 'axios-hooks';
 import { AppConfig } from '../../_configs/app.config';
 import useAxiosMockup from './useAxiosMockup';
-
-function useAxios<TResponse = any, TBody = any, TError = any>(
-  config: AxiosRequestConfig<TBody> | string,
-  options?: Options & { mockData?: TResponse }
-): UseAxiosResult<TResponse, TBody, TError> {
-  const mockupResult = useAxiosMockup<TResponse>({
-    result: options?.mockData,
-    manual: options?.manual,
-    refetchKey: JSON.stringify(config),
-    config: config as AxiosRequestConfig,
-  });
-  const apiResult = useOriginalAxios<TResponse>(config, {
-    ...options,
-    manual: AppConfig.enableApiMockup || options?.manual,
-  });
-  if (AppConfig.enableApiMockup) {
-    return mockupResult;
-  }
-  return apiResult;
+type WrapperOptions = Options & {
+  mockResult?: any; // dữ liệu mock trả về khi bật mockup
+};
+function useAxiosWrapper<TResponse>(
+  config: AxiosRequestConfig | string, // gồm có method, url, params
+  options?: WrapperOptions & { mockData?: TResponse } // nạp mockUsers ở đây
+) {
+    // nếu dặt enableApiMockup là true thì gọi api ảo lấy dự liệu truyền từ mock
+    const mockResult = useAxiosMockup({
+        result: options?.mockData,
+        manual: options?.manual || false,
+        refetchKey: JSON.stringify(config),
+        config: typeof config === 'string' ? { url: config } : config,
+      });
+    if (!AppConfig.enableApiMockup) {
+      return mockResult;
+    }
+    return [];
+    
 }
 
-export default useAxios;
+export default useAxiosWrapper;
+

@@ -1,26 +1,21 @@
+'use client';
 import { mockUsers } from "@/types/user.mocks";
 import { User, UserGetParam } from "@/types/user.type";
-import useAxios from "axios-hooks";
-
+import useAxiosWrapper from "../shared/useAxiosWrapper";
 function useUserList (params: UserGetParam) {
     const {page = 0, per_page= 10, keyword= ''} = params ?? {};
-    return useAxios<{
-        data: User[]
-    }>(
+    const result = useAxiosWrapper
+    (
         {
             method: 'GET',
             url: '/users',
             params,
         },
         {
-        mockData: {
-            data: mockUsers
-            .filter((user) =>
-                user.email.toLowerCase().includes(keyword.toLowerCase())
-            )
-            .slice(page, per_page),
-        }
-    } 
+            mockData: mockUsers,
+            
+        } 
     )
+    return result;
 }
 export default useUserList;
