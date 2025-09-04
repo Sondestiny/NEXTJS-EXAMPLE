@@ -3,7 +3,6 @@
 import { CacheProvider } from '@emotion/react';
 import { ReactNode } from 'react';
 import createEmotionCache from '@/_utils/createEmotionCache';
-
 const clientSideEmotionCache = createEmotionCache();
 
 export default function EmotionRegistry({

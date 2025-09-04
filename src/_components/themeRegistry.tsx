@@ -18,7 +18,7 @@ export default function ThemeRegistry ( {children} : {children: ReactNode}) {
             <ThemeProvider  theme={theme} >
               <CssBaseline />
               <button
-                onClick={toggleTheme}
+                onClick={()=> {toggleTheme}}
                 style={{
                   position: 'fixed',
                   top: 16,

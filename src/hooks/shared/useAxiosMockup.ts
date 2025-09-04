@@ -24,7 +24,7 @@ function useAxiosMockup(
     config,
 }: MockupConfigType) : UseAxiosResult {
     // khai báo 3 biến data, loading, error để mô phỏng ResponseValue
-    const [data, setData] = useState<User[]>(result);
+    const [data, setData] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<AxiosError | null>(null);
     
@@ -34,7 +34,7 @@ function useAxiosMockup(
             configOrEvent?: AxiosRequestConfig<Body> | string | Event,
             options?: RefetchOptions
         ): AxiosPromise<Response> => {
-            console.log('chạy refetch ')
+            console.log('chạy refetch ');
             return new Promise((resolve)=> {
                 setTimeout(()=> {
                     setData(result);
@@ -52,9 +52,10 @@ function useAxiosMockup(
         }, [result, config]
     );
     useEffect(()=> {
-        if (!manual) {refetch()}
+        console.log('chạy useEffect ');
+        if (!manual) refetch()
         
-    }, [manual, refetchKey, refetch])
+    }, [refetchKey, manual, refetch])
     return [{data, loading, error}, refetch , ()=> undefined]
 }
 export default useAxiosMockup;
