@@ -20,12 +20,14 @@
     "axios-cache-interceptor": "^1.8.0",
     "axios-hooks": "^5.1.1",
     "lru-cache": "^11.1.0",
+    "mongoose": "^8.18.0",
     "next": "15.4.6",
     "next-auth": "^5.0.0-beta.29",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
-    "yup": "^1.7.0"
+    "yup": "^1.7.0",
+    "zod": "^4.1.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

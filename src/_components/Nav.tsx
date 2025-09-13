@@ -1,15 +1,18 @@
 'use client';
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@mui/material';
 import { useSession, signIn, signOut } from "next-auth/react"
+import { sign } from 'crypto';
 
 const Nav = () => {
-  const isUserLoggedIn = true;
+  const { data: session } = useSession();
+  // const isUserLoggedIn = true;
   const [dropDown, setDropdown] = useState(false);
   return (
     <nav className='w-full flex justify-between  mb-16 px-3 py-3'>
+      {/* {logo navigation} */}
       <Link href={"/"} className=' flex gap-3 justify-center'>
         <Image 
           src="/assets/images/logo.svg" 
@@ -19,43 +22,30 @@ const Nav = () => {
           className='object-contain'/>
         <p className='m-auto logo_text '>Promptopia</p>
       </Link>
+      {/* {menu navigation} */}
       {/* {desktop navigation} */}
       <div className=' sm:flex hidden items-center '>
-        {isUserLoggedIn ?
+        {session?.user ?
         <div className='flex gap-3 md:gap-5'>
           <Link href="/create-prompt" className='black_btn'>
             <p>Create Post</p>
           </Link>
-          <button  
-            type='button'
-            className='outline_btn'
-          >
+          <button  type='button' className='outline_btn' onClick={() => {signOut();}}>
             SignOut
           </button>
-          <Link
-            href="/profile">
-              <Image 
-                src="/assets/images/user.png" 
-                alt="logo" 
-                width={37}
-                height={37}
-                className='object-contain'
-              />
+          <Link href="/profile">
+              <Image src="/assets/images/user.png" alt="logo" width={37}height={37}className='object-contain'/>
           </Link>
         </div>
-        :  
+        :
         <div className='flex gap-3 md:gap-5'>
-          <button  type='button' className='outline_btn'>
-            SignIn
-          </button>
+          <Link href="/signIn">
+            <button  type='button' className='outline_btn'>
+              SignIn
+            </button>
+          </Link>
           <Link href="/profile">
-              <Image 
-                src="/assets/images/user.png" 
-                alt="logo" 
-                width={37}
-                height={37}
-                className='object-contain'
-              />
+              <Image src="/assets/images/user.png" alt="logo" width={37}height={37}className='object-contain'/>
           </Link>
         </div>
         }
@@ -75,7 +65,7 @@ const Nav = () => {
           {dropDown && (
             <div className='dropdown'>
               <div className=' dropdown-content'>
-                {isUserLoggedIn ? <>
+                {session?.user ? <>
                   <Link
                     href="/profile"
                     className='dropdown_link' 
